@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- ...existing code... -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoTrack - Gamified Footprint Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+   
+    <!-- external stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<!-- ...existing code... -->
+<body class="gradient-bg min-h-screen">
+    <!-- Login/Signup Page -->
+    <div id="authPage" class="min-h-screen flex items-center justify-center p-4">
+        <div class="max-w-md w-full">
+            <!-- Logo and Header -->
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-white rounded-full mb-4 animate-float">
+                    <span class="text-2xl">🌱</span>
+                </div>
+                <h1 class="text-3xl font-bold text-white mb-2">EcoTrack</h1>
+                <p class="text-white/80">Track your carbon footprint, earn points, save the planet!</p>
+            </div>
+
+            <!-- Auth Form Container -->
+            <div class="glass-effect rounded-2xl p-8 shadow-2xl">
+                <!-- Login Form -->
+                <div id="loginForm">
+                    <h2 class="text-2xl font-semibold text-white mb-6 text-center">Welcome Back</h2>
+                   
+                    <form id="loginFormElement" class="space-y-4">
+                        <div>
+                            <label class="block text-white/90 text-sm font-medium mb-2">Email</label>
+                            <input type="email" id="loginEmail" required
+                                   class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
+                                   placeholder="Enter your email">
+                        </div>
+                       
+                        <div>
+                            <label class="block text-white/90 text-sm font-medium mb-2">Password</label>
+                            <div class="relative">
+                                <input type="password" id="loginPassword" required
+                                       class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
+                                       placeholder="Enter your password">
+                                <button type="button" id="loginPasswordToggle" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/70 hover:text-white cursor-pointer">
+                                    <svg class="w-5 h-5 eye-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                       
+                        <!-- Error Message Display -->
+                        <div id="loginError" class="hidden mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                            <div class="flex items-center space-x-2">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span id="loginErrorText">Email/Password incorrect</span>
+                            </div>
+                        </div>
+                       
+                        <button type="submit"
+                                class="w-full eco-gradient text-white font-semibold py-3 px-4 rounded-lg hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                            Sign In
+                        </button>
+                    </form>
+                   
+                    <div class="mt-6">
+                        <div class="relative">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full border-t border-white/20"></div>
+                            </div>
+                            <div class="relative flex justify-center text-sm">
+                                <span class="px-2 bg-transparent text-white/70">Or continue with</span>
+                            </div>
+                        </div>
+                       
+                        <button id="googleLogin"
+                                class="mt-4 w-full bg-white text-gray-700 font-semibold py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center space-x-2">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24">
+                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                            </svg>
+                            <span>Continue with Google</span>
+                        </button>
+                    </div>
+                   
+                    <p class="mt-6 text-center text-white/70">
+                        Don't have an account?
+                        <button id="showSignup" class="text-green-300 hover:text-green-200 font-medium">Sign up</button>
+                    </p>
+                </div>
+
+                <!-- Signup Form -->
+                <div id="signupForm" class="hidden">
+                    <h2 class="text-2xl font-semibold text-white mb-6 text-center">Join EcoTrack</h2>
+                   
+                    <form id="signupFormElement" class="space-y-4">
+                        <div>
+                            <label class="block text-white/90 text-sm font-medium mb-2">Full Name</label>
+                            <input type="text" id="signupName" required
+                                   class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
+                                   placeholder="Enter your full name">
+                        </div>
+                       
+                        <div>
+                            <label class="block text-white/90 text-sm font-medium mb-2">Email</label>
+                            <input type="email" id="signupEmail" required
+                                   class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
+                                   placeholder="Enter your email">
+                        </div>
+                       
+                        <div>
+                            <label class="block text-white/90 text-sm font-medium mb-2">Password</label>
+                            <div class="relative">
+                                <input type="password" id="signupPassword" required
+                                       class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent"
+                                       placeholder="Create a password">
+                                <button type="button" id="signupPasswordToggle" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/70 hover:text-white cursor-pointer">
+                                    <svg class="w-5 h-5 eye-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                       
+                        <button type="submit"
+                                class="w-full eco-gradient text-white font-semibold py-3 px-4 rounded-lg hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                            Create Account
+                        </button>
+                    </form>
+                   
+                    <div class="mt-6">
+                        <div class="relative">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full border-t border-white/20"></div>
+                            </div>
+                            <div class="relative flex justify-center text-sm">
+                                <span class="px-2 bg-transparent text-white/70">Or continue with</span>
+                            </div>
+                        </div>
+                       
+                        <button id="googleSignup"
+                                class="mt-4 w-full bg-white text-gray-700 font-semibold py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center space-x-2">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24">
+                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                            </svg>
+                            <span>Continue with Google</span>
+                        </button>
+                    </div>
+                   
+                    <p class="mt-6 text-center text-white/70">
+                        Already have an account?
+                        <button id="showLogin" class="text-green-300 hover:text-green-200 font-medium">Sign in</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div id="dashboardPage" class="hidden min-h-screen bg-gray-50">
+        <!-- Navigation Header -->
+        <nav class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-8">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-2xl">🌱</span>
+                            <span class="text-xl font-bold text-gray-900">EcoTrack</span>
+                        </div>
+                       
+                        <!-- Desktop Navigation -->
+                        <nav class="hidden md:flex items-center space-x-8">
+                            <button id="navDashboard" class="text-green-600 border-b-2 border-green-600 pb-1 hover:text-green-700 font-medium transition-colors">
+                                Dashboard
+                            </button>
+                            <button id="navLogActivity" class="text-gray-600 hover:text-green-600 font-medium transition-colors">
+                                Log Activity
+                            </button>
+                            <button id="navTeams" class="text-gray-600 hover:text-green-600 font-medium transition-colors">
+                                Teams
+                            </button>
+                            <button id="navLeaderboard" class="text-gray-600 hover:text-green-600 font-medium transition-colors">
+                                Leaderboard
+                            </button>
+                            <button id="navSettings" class="text-gray-600 hover:text-green-600 font-medium transition-colors">
+                                Settings
+                            </button>
+                        </nav>
+                    </div>
+                   
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center space-x-2 bg-orange-100 px-3 py-1 rounded-full">
+                            <span class="text-sm font-medium text-orange-800" id="streakCounter">🔥 7</span>
+                        </div>
+                        <div class="flex items-center space-x-2 bg-green-100 px-3 py-1 rounded-full">
+                            <span class="text-sm font-medium text-green-800">1,250 pts</span>
+                            <span class="text-green-600">⭐</span>
+                        </div>
+                        <button id="logoutBtn" class="text-gray-600 hover:text-red-600">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Mobile Hamburger Menu (positioned below logo) -->
+        <div class="md:hidden bg-white border-b border-gray-100">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-center py-3">
+                    <button id="mobileHamburgerMenu" class="flex flex-col space-y-1 p-3 hover:bg-gray-100 rounded-lg transition-colors">
+                        <div class="w-6 h-0.5 bg-gray-600 transition-all duration-300" id="hamburgerLine1"></div>
+                        <div class="w-6 h-0.5 bg-gray-600 transition-all duration-300" id="hamburgerLine2"></div>
+                        <div class="w-6 h-0.5 bg-gray-600 transition-all duration-300" id="hamburgerLine3"></div>
+                    </button>
+                </div>
+               
+                <!-- Mobile Navigation Menu -->
+                <div id="mobileNavMenu" class="hidden pb-4">
+                    <div class="space-y-1">
+                        <button id="mobileNavDashboard" class="w-full text-left px-4 py-3 text-green-600 bg-green-50 font-medium flex items-center space-x-3 rounded-lg">
+                            <span class="text-xl">🏠</span>
+                            <span>Dashboard</span>
+                        </button>
+                        <button id="mobileNavLogActivity" class="w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-100 font-medium flex items-center space-x-3 rounded-lg transition-colors">
+                            <span class="text-xl">📝</span>
+                            <span>Log Activity</span>
+                        </button>
+                        <button id="mobileNavTeams" class="w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-100 font-medium flex items-center space-x-3 rounded-lg transition-colors">
+                            <span class="text-xl">👥</span>
+                            <span>Teams</span>
+                        </button>
+                        <button id="mobileNavLeaderboard" class="w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-100 font-medium flex items-center space-x-3 rounded-lg transition-colors">
+                            <span class="text-xl">🏆</span>
+                            <span>Leaderboard</span>
+                        </button>
+                        <button id="mobileNavSettings" class="w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-100 font-medium flex items-center space-x-3 rounded-lg transition-colors">
+                            <span class="text-xl">⚙️</span>
+                            <span>Settings</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div id="dashboardContent" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+           
+            <!-- Welcome Section -->
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">Welcome back, <span id="userName">Eco Warrior</span>! 🌟</h1>
+                <p class="text-gray-600">You're making a real difference for our planet. Keep up the amazing work!</p>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">CO₂ Saved This Month</p>
+                            <p class="text-3xl font-bold text-green-600">24.5 kg</p>
+                            <p class="text-sm text-green-600 mt-1">↑ 15% from last month</p>
+                        </div>
+                        <div class="text-4xl">🌍</div>
+                    </div>
+                    <!-- Mini Progress Bar -->
+                    <div class="mt-4">
+                        <div class="flex justify-between text-xs text-gray-500 mb-1">
+                            <span>Progress</span>
+                            <span>82%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-green-500 h-2 rounded-full" style="width: 82%"></div>
+                        </div>
+                    </div>
+                </div>
+               
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Points Earned</p>
+                            <p class="text-3xl font-bold text-blue-600">1,250</p>
+                            <p class="text-sm text-blue-600 mt-1">Level 5 Eco Champion</p>
+                        </div>
+                        <div class="text-4xl">⭐</div>
+                    </div>
+                    <!-- Level Progress -->
+                    <div class="mt-4">
+                        <div class="flex justify-between text-xs text-gray-500 mb-1">
+                            <span>Level 5</span>
+                            <span>250/1500 to Level 6</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-blue-500 h-2 rounded-full" style="width: 17%"></div>
+                        </div>
+                    </div>
+                </div>
+               
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Team Ranking</p>
+                            <p class="text-3xl font-bold text-purple-600">#3</p>
+                            <p class="text-sm text-purple-600 mt-1">Green Warriors Squad</p>
+                        </div>
+                        <div class="text-4xl">🏆</div>
+                    </div>
+                    <!-- Ranking Trend -->
+                    <div class="mt-4 flex items-center space-x-2">
+                        <div class="flex space-x-1">
+                            <div class="w-2 h-6 bg-purple-200 rounded"></div>
+                            <div class="w-2 h-8 bg-purple-300 rounded"></div>
+                            <div class="w-2 h-10 bg-purple-400 rounded"></div>
+                            <div class="w-2 h-12 bg-purple-500 rounded"></div>
+                            <div class="w-2 h-14 bg-purple-600 rounded"></div>
+                        </div>
+                        <span class="text-xs text-green-600">↗ Trending up</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <!-- Weekly Activity Chart -->
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-6">Weekly Activity</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-600">Mon</span>
+                            <div class="flex-1 mx-4">
+                                <div class="w-full bg-gray-200 rounded-full h-3">
+                                    <div class="bg-green-500 h-3 rounded-full" style="width: 85%"></div>
+                                </div>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900">170 pts</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-600">Tue</span>
+                            <div class="flex-1 mx-4">
+                                <div class="w-full bg-gray-200 rounded-full h-3">
+                                    <div class="bg-green-500 h-3 rounded-full" style="width: 65%"></div>
+                                </div>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900">130 pts</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-600">Wed</span>
+                            <div class="flex-1 mx-4">
+                                <div class="w-full bg-gray-200 rounded-full h-3">
+                                    <div class="bg-green-500 h-3 rounded-full" style="width: 95%"></div>
+                                </div>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900">190 pts</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-600">Thu</span>
+                            <div class="flex-1 mx-4">
+                                <div class="w-full bg-gray-200 rounded-full h-3">
+                                    <div class="bg-green-500 h-3 rounded-full" style="width: 75%"></div>
+                                </div>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900">150 pts</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-600">Fri</span>
+                            <div class="flex-1 mx-4">
+                                <div class="w-full bg-gray-200 rounded-full h-3">
+                                    <div class="bg-green-500 h-3 rounded-full" style="width: 100%"></div>
+                                </div>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900">200 pts</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-600">Sat</span>
+                            <div class="flex-1 mx-4">
+                                <div class="w-full bg-gray-200 rounded-full h-3">
+                                    <div class="bg-green-500 h-3 rounded-full" style="width: 55%"></div>
+                                </div>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900">110 pts</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-600">Sun</span>
+                            <div class="flex-1 mx-4">
+                                <div class="w-full bg-gray-200 rounded-full h-3">
+                                    <div class="bg-green-500 h-3 rounded-full" style="width: 40%"></div>
+                                </div>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900">80 pts</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Breakdown Pie Chart -->
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-6">Activity Breakdown</h3>
+                    <div class="flex items-center justify-center mb-6">
+                        <!-- Simple Pie Chart using CSS -->
+                        <div class="relative w-32 h-32">
+                            <svg class="w-32 h-32 transform -rotate-90" viewBox="0 0 36 36">
+                                <!-- Cycling: 40% -->
+                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                      fill="none" stroke="#10b981" stroke-width="3"
+                                      stroke-dasharray="40, 100" stroke-linecap="round"/>
+                                <!-- Public Transport: 30% -->
+                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                      fill="none" stroke="#3b82f6" stroke-width="3"
+                                      stroke-dasharray="30, 100" stroke-dashoffset="-40" stroke-linecap="round"/>
+                                <!-- Energy Saving: 20% -->
+                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                      fill="none" stroke="#f59e0b" stroke-width="3"
+                                      stroke-dasharray="20, 100" stroke-dashoffset="-70" stroke-linecap="round"/>
+                                <!-- Recycling: 10% -->
+                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                      fill="none" stroke="#8b5cf6" stroke-width="3"
+                                      stroke-dasharray="10, 100" stroke-dashoffset="-90" stroke-linecap="round"/>
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <span class="text-2xl">🌱</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                <span class="text-sm text-gray-600">🚴 Cycling</span>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900">40%</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+                                <span class="text-sm text-gray-600">🚌 Public Transport</span>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900">30%</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                                <span class="text-sm text-gray-600">💡 Energy Saving</span>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900">20%</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-3 h-3 bg-purple-500 rounded-full"></div>
+                                <span class="text-sm text-gray-600">♻️ Recycling</span>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900">10%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Tip Section -->
+            <div class="bg-gradient-to-r from-green-400 to-blue-500 rounded-xl p-6 mb-8 text-white">
+                <div class="flex items-start space-x-4">
+                    <div class="text-3xl">🤖</div>
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold mb-2">AI Eco Tip of the Day</h3>
+                        <p class="text-green-50 mb-4">Based on your activity, you could save an additional 3.2kg CO₂ this month by cycling to work twice a week instead of driving. This would earn you 150 bonus points!</p>
+                        <button id="setGoalBtn" class="bg-white text-green-600 px-4 py-2 rounded-lg font-medium hover:bg-green-50 transition-colors">
+                            Set This as Goal
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activities & Quick Actions -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Recent Activities -->
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-semibold text-gray-900">Recent Activities</h3>
+                        <button id="viewAllActivities" class="text-green-600 text-sm font-medium hover:text-green-700">View All</button>
+                    </div>
+                   
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
+                            <div class="text-2xl">🚴</div>
+                            <div class="flex-1">
+                                <p class="font-medium text-gray-900">Cycling to Work</p>
+                                <p class="text-sm text-gray-600">5.2 km • Saved 1.2kg CO₂ • +50 pts</p>
+                            </div>
+                            <span class="text-xs text-gray-500">2h ago</span>
+                        </div>
+                       
+                        <div class="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
+                            <div class="text-2xl">🚌</div>
+                            <div class="flex-1">
+                                <p class="font-medium text-gray-900">Public Transport</p>
+                                <p class="text-sm text-gray-600">12 km • Saved 2.8kg CO₂ • +75 pts</p>
+                            </div>
+                            <span class="text-xs text-gray-500">1d ago</span>
+                        </div>
+                       
+                        <div class="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
+                            <div class="text-2xl">💡</div>
+                            <div class="flex-1">
+                                <p class="font-medium text-gray-900">Energy Saving</p>
+                                <p class="text-sm text-gray-600">LED bulbs • Saved 0.8kg CO₂ • +25 pts</p>
+                            </div>
+                            <span class="text-xs text-gray-500">2d ago</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-6">Quick Actions</h3>
+                   
+                    <div class="grid grid-cols-2 gap-4">
+                        <button id="quickLogActivity" class="flex flex-col items-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                            <div class="text-3xl mb-2">📝</div>
+                            <span class="text-sm font-medium text-green-700">Log Activity</span>
+                        </button>
+                       
+                        <button id="quickViewTeam" class="flex flex-col items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
+                            <div class="text-3xl mb-2">👥</div>
+                            <span class="text-sm font-medium text-blue-700">View Team</span>
+                        </button>
+                       
+                        <button id="quickLeaderboard" class="flex flex-col items-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">
+                            <div class="text-3xl mb-2">🏆</div>
+                            <span class="text-sm font-medium text-purple-700">Leaderboard</span>
+                        </button>
+                       
+                        <button id="quickExport" class="flex flex-col items-center p-4 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors">
+                            <div class="text-3xl mb-2">📊</div>
+                            <span class="text-sm font-medium text-orange-700">Export Data</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+       
+        <!-- Teams Content -->
+        <div id="teamsContent" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+            <!-- Current Team -->
+            <div class="bg-gradient-to-r from-green-400 to-blue-500 rounded-xl p-6 mb-8 text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2">Green Warriors Squad 🌟</h3>
+                        <p class="text-green-50 mb-4">5 members • 3,450 total points • Rank #3</p>
+                        <div class="flex items-center space-x-4">
+                            <div class="text-center">
+                                <p class="text-2xl font-bold">156kg</p>
+                                <p class="text-sm text-green-100">CO₂ Saved</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-2xl font-bold">23</p>
+                                <p class="text-sm text-green-100">Days Active</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-6xl">🏆</div>
+                </div>
+                <!-- Team Progress Bar -->
+                <div class="mt-6">
+                    <div class="flex justify-between text-sm text-green-100 mb-2">
+                        <span>Team Goal Progress</span>
+                        <span>3,450 / 5,000 pts</span>
+                    </div>
+                    <div class="w-full bg-green-300 bg-opacity-30 rounded-full h-3">
+                        <div class="bg-white h-3 rounded-full" style="width: 69%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Performance Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <!-- Team Activity Comparison -->
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-6">Team Activity This Week</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-sm">A</div>
+                                <span class="text-sm text-gray-600">Alex (You)</span>
+                            </div>
+                            <div class="flex-1 mx-4">
+                                <div class="w-full bg-gray-200 rounded-full h-3">
+                                    <div class="bg-green-500 h-3 rounded-full" style="width: 85%"></div>
+                                </div>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900">340 pts</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">S</div>
+                                <span class="text-sm text-gray-600">Sarah</span>
+                            </div>
+                            <div class="flex-1 mx-4">
+                                <div class="w-full bg-gray-200 rounded-full h-3">
+                                    <div class="bg-blue-500 h-3 rounded-full" style="width: 75%"></div>
+                                </div>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900">300 pts</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm">M</div>
+                                <span class="text-sm text-gray-600">Mike</span>
+                            </div>
+                            <div class="flex-1 mx-4">
+                                <div class="w-full bg-gray-200 rounded-full h-3">
+                                    <div class="bg-purple-500 h-3 rounded-full" style="width: 65%"></div>
+                                </div>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900">260 pts</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center text-white font-bold text-sm">E</div>
+                                <span class="text-sm text-gray-600">Emma</span>
+                            </div>
+                            <div class="flex-1 mx-4">
+                                <div class="w-full bg-gray-200 rounded-full h-3">
+                                    <div class="bg-pink-500 h-3 rounded-full" style="width: 45%"></div>
+                                </div>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900">180 pts</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team CO₂ Impact -->
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-6">Monthly CO₂ Impact</h3>
+                    <div class="flex items-center justify-center mb-6">
+                        <div class="relative">
+                            <!-- Circular Progress -->
+                            <svg class="w-32 h-32 transform -rotate-90" viewBox="0 0 36 36">
+                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                      fill="none" stroke="#e5e7eb" stroke-width="3"/>
+                                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                      fill="none" stroke="#10b981" stroke-width="3"
+                                      stroke-dasharray="78, 100" stroke-linecap="round"/>
+                            </svg>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                <span class="text-2xl font-bold text-gray-900">156kg</span>
+                                <span class="text-xs text-gray-500">CO₂ Saved</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">🎯 Monthly Goal</span>
+                            <span class="text-sm font-medium text-gray-900">200kg</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">📈 Progress</span>
+                            <span class="text-sm font-medium text-green-600">78%</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">🏃 Days Left</span>
+                            <span class="text-sm font-medium text-gray-900">8 days</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Members -->
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 mb-8">
+                <h3 class="text-lg font-semibold text-gray-900 mb-6">Team Members</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">A</div>
+                            <div>
+                                <p class="font-medium text-gray-900">Alex Chen (You)</p>
+                                <p class="text-sm text-gray-600">Team Captain • 1,250 pts</p>
+                            </div>
+                        </div>
+                        <div class="text-2xl">👑</div>
+                    </div>
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">S</div>
+                            <div>
+                                <p class="font-medium text-gray-900">Sarah Johnson</p>
+                                <p class="text-sm text-gray-600">890 pts • 🚴 Cycling Expert</p>
+                            </div>
+                        </div>
+                        <div class="text-xl">🥈</div>
+                    </div>
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold">M</div>
+                            <div>
+                                <p class="font-medium text-gray-900">Mike Rodriguez</p>
+                                <p class="text-sm text-gray-600">720 pts • ♻️ Recycling Pro</p>
+                            </div>
+                        </div>
+                        <div class="text-xl">🥉</div>
+                    </div>
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center text-white font-bold">E</div>
+                            <div>
+                                <p class="font-medium text-gray-900">Emma Wilson</p>
+                                <p class="text-sm text-gray-600">590 pts • 🌱 Green Newbie</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Invite Friends -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-6">Invite Friends</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                            <input type="email" id="inviteEmail"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                                   placeholder="friend@example.com">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Personal Message</label>
+                            <textarea id="inviteMessage" rows="3"
+                                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                                      placeholder="Hey! Join my eco team and let's save the planet together! 🌍"></textarea>
+                        </div>
+                        <button id="sendInviteBtn" class="w-full eco-gradient text-white font-semibold py-3 px-4 rounded-lg hover:shadow-lg transition-all duration-200">
+                            Send Invitation 📧
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Available Teams -->
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-6">Join Other Teams</h3>
+                    <div class="space-y-4">
+                        <div class="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="font-medium text-gray-900">🌊 Ocean Guardians</p>
+                                    <p class="text-sm text-gray-600">8 members • 4,200 pts • Rank #1</p>
+                                </div>
+                                <button class="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600 transition-colors">
+                                    Join
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="font-medium text-gray-900">🚴 Cycle Squad</p>
+                                    <p class="text-sm text-gray-600">6 members • 3,800 pts • Rank #2</p>
+                                </div>
+                                <button class="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600 transition-colors">
+                                    Join
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="font-medium text-gray-900">♻️ Recycle Rangers</p>
+                                    <p class="text-sm text-gray-600">4 members • 2,900 pts • Rank #4</p>
+                                </div>
+                                <button class="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600 transition-colors">
+                                    Join
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="font-medium text-gray-900">🌱 Plant Heroes</p>
+                                    <p class="text-sm text-gray-600">7 members • 2,650 pts • Rank #5</p>
+                                </div>
+                                <button class="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600 transition-colors">
+                                    Join
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leaderboard Content -->
+        <div id="leaderboardContent" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+            <!-- Top 3 Podium -->
+            <div class="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl p-8 mb-8 text-white">
+                <div class="grid grid-cols-3 gap-6">
+                    <!-- 2nd Place -->
+                    <div class="text-center">
+                        <div class="text-4xl mb-2">🥈</div>
+                        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-gray-900 font-bold text-xl mx-auto mb-2">M</div>
+                        <p class="font-semibold">Maria Santos</p>
+                        <p class="text-yellow-100 text-sm">2,890 pts</p>
+                    </div>
+                    <!-- 1st Place -->
+                    <div class="text-center">
+                        <div class="text-5xl mb-2">🥇</div>
+                        <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center text-gray-900 font-bold text-2xl mx-auto mb-2">D</div>
+                        <p class="font-bold text-lg">David Kim</p>
+                        <p class="text-yellow-100">3,450 pts</p>
+                    </div>
+                    <!-- 3rd Place -->
+                    <div class="text-center">
+                        <div class="text-4xl mb-2">🥉</div>
+                        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-gray-900 font-bold text-xl mx-auto mb-2">L</div>
+                        <p class="font-semibold">Lisa Chen</p>
+                        <p class="text-yellow-100 text-sm">2,650 pts</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Trends -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <!-- Top Performers Trend -->
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-6">Top 5 Performance Trend</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold text-sm">1</div>
+                                <span class="text-sm text-gray-600">David Kim</span>
+                            </div>
+                            <div class="flex space-x-1">
+                                <div class="w-2 h-8 bg-yellow-200 rounded"></div>
+                                <div class="w-2 h-10 bg-yellow-300 rounded"></div>
+                                <div class="w-2 h-12 bg-yellow-400 rounded"></div>
+                                <div class="w-2 h-14 bg-yellow-500 rounded"></div>
+                                <div class="w-2 h-16 bg-yellow-600 rounded"></div>
+                            </div>
+                            <span class="text-sm font-medium text-green-600">↗ +150</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center text-white font-bold text-sm">2</div>
+                                <span class="text-sm text-gray-600">Maria Santos</span>
+                            </div>
+                            <div class="flex space-x-1">
+                                <div class="w-2 h-10 bg-gray-200 rounded"></div>
+                                <div class="w-2 h-8 bg-gray-300 rounded"></div>
+                                <div class="w-2 h-12 bg-gray-400 rounded"></div>
+                                <div class="w-2 h-14 bg-gray-500 rounded"></div>
+                                <div class="w-2 h-13 bg-gray-600 rounded"></div>
+                            </div>
+                            <span class="text-sm font-medium text-green-600">↗ +120</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold text-sm">3</div>
+                                <span class="text-sm text-gray-600">Lisa Chen</span>
+                            </div>
+                            <div class="flex space-x-1">
+                                <div class="w-2 h-6 bg-orange-200 rounded"></div>
+                                <div class="w-2 h-9 bg-orange-300 rounded"></div>
+                                <div class="w-2 h-11 bg-orange-400 rounded"></div>
+                                <div class="w-2 h-12 bg-orange-500 rounded"></div>
+                                <div class="w-2 h-14 bg-orange-600 rounded"></div>
+                            </div>
+                            <span class="text-sm font-medium text-green-600">↗ +95</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">4</div>
+                                <span class="text-sm text-gray-600">James Wilson</span>
+                            </div>
+                            <div class="flex space-x-1">
+                                <div class="w-2 h-8 bg-blue-200 rounded"></div>
+                                <div class="w-2 h-7 bg-blue-300 rounded"></div>
+                                <div class="w-2 h-10 bg-blue-400 rounded"></div>
+                                <div class="w-2 h-11 bg-blue-500 rounded"></div>
+                                <div class="w-2 h-12 bg-blue-600 rounded"></div>
+                            </div>
+                            <span class="text-sm font-medium text-green-600">↗ +80</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-sm">10</div>
+                                <span class="text-sm text-gray-600">You</span>
+                            </div>
+                            <div class="flex space-x-1">
+                                <div class="w-2 h-4 bg-green-200 rounded"></div>
+                                <div class="w-2 h-6 bg-green-300 rounded"></div>
+                                <div class="w-2 h-8 bg-green-400 rounded"></div>
+                                <div class="w-2 h-9 bg-green-500 rounded"></div>
+                                <div class="w-2 h-11 bg-green-600 rounded"></div>
+                            </div>
+                            <span class="text-sm font-medium text-green-600">↗ +50</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Distribution -->
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-6">Global Activity Distribution</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-2xl">🚴</span>
+                                <span class="text-sm text-gray-600">Cycling</span>
+                            </div>
+                            <div class="flex-1 mx-4">
+                                <div class="w-full bg-gray-200 rounded-full h-3">
+                                    <div class="bg-green-500 h-3 rounded-full" style="width: 45%"></div>
+                                </div>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900">45%</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-2xl">🚌</span>
+                                <span class="text-sm text-gray-600">Public Transport</span>
+                            </div>
+                            <div class="flex-1 mx-4">
+                                <div class="w-full bg-gray-200 rounded-full h-3">
+                                    <div class="bg-blue-500 h-3 rounded-full" style="width: 35%"></div>
+                                </div>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900">35%</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-2xl">♻️</span>
+                                <span class="text-sm text-gray-600">Recycling</span>
+                            </div>
+                            <div class="flex-1 mx-4">
+                                <div class="w-full bg-gray-200 rounded-full h-3">
+                                    <div class="bg-purple-500 h-3 rounded-full" style="width: 15%"></div>
+                                </div>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900">15%</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-2xl">💡</span>
+                                <span class="text-sm text-gray-600">Energy Saving</span>
+                            </div>
+                            <div class="flex-1 mx-4">
+                                <div class="w-full bg-gray-200 rounded-full h-3">
+                                    <div class="bg-yellow-500 h-3 rounded-full" style="width: 5%"></div>
+                                </div>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900">5%</span>
+                        </div>
+                    </div>
+                   
+                    <!-- Weekly Stats -->
+                    <div class="mt-6 pt-6 border-t border-gray-100">
+                        <h4 class="text-sm font-medium text-gray-900 mb-4">This Week's Impact</h4>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-green-600">2.4T</p>
+                                <p class="text-xs text-gray-500">CO₂ Saved</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-blue-600">1,247</p>
+                                <p class="text-xs text-gray-500">Active Users</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Full Leaderboard -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                <div class="p-6 border-b border-gray-100">
+                    <h3 class="text-lg font-semibold text-gray-900">Global Rankings</h3>
+                </div>
+                <div class="divide-y divide-gray-100">
+                    <div class="p-4 flex items-center justify-between bg-yellow-50">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-2xl font-bold text-yellow-600">#1</span>
+                            <div class="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold">D</div>
+                            <div>
+                                <p class="font-semibold text-gray-900">David Kim</p>
+                                <p class="text-sm text-gray-600">🌊 Ocean Guardians</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-gray-900">3,450 pts</p>
+                            <p class="text-sm text-green-600">↑ 150 this week</p>
+                        </div>
+                    </div>
+                    <div class="p-4 flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-xl font-bold text-gray-600">#2</span>
+                            <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold">M</div>
+                            <div>
+                                <p class="font-semibold text-gray-900">Maria Santos</p>
+                                <p class="text-sm text-gray-600">🚴 Cycle Squad</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-gray-900">2,890 pts</p>
+                            <p class="text-sm text-green-600">↑ 120 this week</p>
+                        </div>
+                    </div>
+                    <div class="p-4 flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-xl font-bold text-gray-600">#3</span>
+                            <div class="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center text-white font-bold">L</div>
+                            <div>
+                                <p class="font-semibold text-gray-900">Lisa Chen</p>
+                                <p class="text-sm text-gray-600">🌱 Plant Heroes</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-gray-900">2,650 pts</p>
+                            <p class="text-sm text-green-600">↑ 95 this week</p>
+                        </div>
+                    </div>
+                    <div class="p-4 flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-xl font-bold text-gray-600">#4</span>
+                            <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">J</div>
+                            <div>
+                                <p class="font-semibold text-gray-900">James Wilson</p>
+                                <p class="text-sm text-gray-600">♻️ Recycle Rangers</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-gray-900">2,340 pts</p>
+                            <p class="text-sm text-green-600">↑ 80 this week</p>
+                        </div>
+                    </div>
+                    <div class="p-4 flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-xl font-bold text-gray-600">#5</span>
+                            <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">A</div>
+                            <div>
+                                <p class="font-semibold text-gray-900">Anna Rodriguez</p>
+                                <p class="text-sm text-gray-600">🌿 Eco Warriors</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-gray-900">2,180 pts</p>
+                            <p class="text-sm text-green-600">↑ 65 this week</p>
+                        </div>
+                    </div>
+                    <div class="p-4 flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-xl font-bold text-gray-600">#6</span>
+                            <div class="w-10 h-10 bg-indigo-500 rounded-full flex items-center justify-center text-white font-bold">R</div>
+                            <div>
+                                <p class="font-semibold text-gray-900">Robert Taylor</p>
+                                <p class="text-sm text-gray-600">🚲 Green Riders</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-gray-900">1,950 pts</p>
+                            <p class="text-sm text-green-600">↑ 45 this week</p>
+                        </div>
+                    </div>
+                    <div class="p-4 flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-xl font-bold text-gray-600">#7</span>
+                            <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center text-white font-bold">S</div>
+                            <div>
+                                <p class="font-semibold text-gray-900">Sophie Brown</p>
+                                <p class="text-sm text-gray-600">🌍 Earth Defenders</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-gray-900">1,820 pts</p>
+                            <p class="text-sm text-green-600">↑ 35 this week</p>
+                        </div>
+                    </div>
+                    <div class="p-4 flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-xl font-bold text-gray-600">#8</span>
+                            <div class="w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center text-white font-bold">T</div>
+                            <div>
+                                <p class="font-semibold text-gray-900">Tom Anderson</p>
+                                <p class="text-sm text-gray-600">🌱 Green Squad</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-gray-900">1,650 pts</p>
+                            <p class="text-sm text-green-600">↑ 25 this week</p>
+                        </div>
+                    </div>
+                    <div class="p-4 flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-xl font-bold text-gray-600">#9</span>
+                            <div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold">E</div>
+                            <div>
+                                <p class="font-semibold text-gray-900">Emily Davis</p>
+                                <p class="text-sm text-gray-600">🌿 Nature Lovers</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-gray-900">1,480 pts</p>
+                            <p class="text-sm text-green-600">↑ 20 this week</p>
+                        </div>
+                    </div>
+                    <div class="p-4 flex items-center justify-between bg-green-50">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-xl font-bold text-green-600">#10</span>
+                            <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">Y</div>
+                            <div>
+                                <p class="font-semibold text-gray-900">You (Alex Chen)</p>
+                                <p class="text-sm text-gray-600">🌟 Green Warriors Squad</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-gray-900">1,250 pts</p>
+                            <p class="text-sm text-green-600">↑ 50 this week</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Content -->
+        <div id="settingsContent" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+            <!-- Usage Analytics -->
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 mb-8">
+                <h3 class="text-lg font-semibold text-gray-900 mb-6">Your EcoTrack Analytics</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-green-600 mb-2">47</div>
+                        <div class="text-sm text-gray-600">Days Active</div>
+                        <div class="mt-2">
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 78%"></div>
+                            </div>
+                            <div class="text-xs text-gray-500 mt-1">78% of days this month</div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-blue-600 mb-2">156</div>
+                        <div class="text-sm text-gray-600">Activities Logged</div>
+                        <div class="mt-2">
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-blue-500 h-2 rounded-full" style="width: 65%"></div>
+                            </div>
+                            <div class="text-xs text-gray-500 mt-1">+23% vs last month</div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-purple-600 mb-2">89.2kg</div>
+                        <div class="text-sm text-gray-600">Total CO₂ Saved</div>
+                        <div class="mt-2">
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-purple-500 h-2 rounded-full" style="width: 89%"></div>
+                            </div>
+                            <div class="text-xs text-gray-500 mt-1">89% of yearly goal</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Heatmap -->
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 mb-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900">12-Month Activity Heatmap</h3>
+                    <div class="text-sm text-gray-600">
+                        <span class="font-medium text-green-600">89.2kg</span> CO₂ saved this year
+                    </div>
+                </div>
+               
+                <!-- Monthly Heatmap Grid -->
+                <div class="space-y-4">
+                    <!-- Month Labels Row -->
+                    <div class="grid grid-cols-12 gap-2 mb-2">
+                        <div class="text-xs text-gray-500 text-center font-medium">Jan</div>
+                        <div class="text-xs text-gray-500 text-center font-medium">Feb</div>
+                        <div class="text-xs text-gray-500 text-center font-medium">Mar</div>
+                        <div class="text-xs text-gray-500 text-center font-medium">Apr</div>
+                        <div class="text-xs text-gray-500 text-center font-medium">May</div>
+                        <div class="text-xs text-gray-500 text-center font-medium">Jun</div>
+                        <div class="text-xs text-gray-500 text-center font-medium">Jul</div>
+                        <div class="text-xs text-gray-500 text-center font-medium">Aug</div>
+                        <div class="text-xs text-gray-500 text-center font-medium">Sep</div>
+                        <div class="text-xs text-gray-500 text-center font-medium">Oct</div>
+                        <div class="text-xs text-gray-500 text-center font-medium">Nov</div>
+                        <div class="text-xs text-gray-500 text-center font-medium">Dec</div>
+                    </div>
+                   
+                    <!-- Heatmap Squares -->
+                    <div class="grid grid-cols-12 gap-2" id="monthlyHeatmap">
+                        <!-- January -->
+                        <div class="group relative">
+                            <div class="w-full h-12 bg-green-300 rounded-lg hover:bg-green-400 transition-colors cursor-pointer flex items-center justify-center">
+                                <span class="text-xs font-medium text-white">18</span>
+                            </div>
+                            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                                Jan: 18 activities<br>6.2kg CO₂ saved
+                            </div>
+                        </div>
+                       
+                        <!-- February -->
+                        <div class="group relative">
+                            <div class="w-full h-12 bg-green-400 rounded-lg hover:bg-green-500 transition-colors cursor-pointer flex items-center justify-center">
+                                <span class="text-xs font-medium text-white">22</span>
+                            </div>
+                            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                                Feb: 22 activities<br>8.1kg CO₂ saved
+                            </div>
+                        </div>
+                       
+                        <!-- March -->
+                        <div class="group relative">
+                            <div class="w-full h-12 bg-green-500 rounded-lg hover:bg-green-600 transition-colors cursor-pointer flex items-center justify-center">
+                                <span class="text-xs font-medium text-white">28</span>
+                            </div>
+                            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                                Mar: 28 activities<br>9.8kg CO₂ saved
+                            </div>
+                        </div>
+                       
+                        <!-- April -->
+                        <div class="group relative">
+                            <div class="w-full h-12 bg-green-200 rounded-lg hover:bg-green-300 transition-colors cursor-pointer flex items-center justify-center">
+                                <span class="text-xs font-medium text-gray-700">12</span>
+                            </div>
+                            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                                Apr: 12 activities<br>4.3kg CO₂ saved
+                            </div>
+                        </div>
+                       
+                        <!-- May -->
+                        <div class="group relative">
+                            <div class="w-full h-12 bg-green-600 rounded-lg hover:bg-green-700 transition-colors cursor-pointer flex items-center justify-center">
+                                <span class="text-xs font-medium text-white">31</span>
+                            </div>
+                            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                                May: 31 activities<br>11.2kg CO₂ saved
+                            </div>
+                        </div>
+                       
+                        <!-- June -->
+                        <div class="group relative">
+                            <div class="w-full h-12 bg-green-400 rounded-lg hover:bg-green-500 transition-colors cursor-pointer flex items-center justify-center">
+                                <span class="text-xs font-medium text-white">25</span>
+                            </div>
+                            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                                Jun: 25 activities<br>8.7kg CO₂ saved
+                            </div>
+                        </div>
+                       
+                        <!-- July -->
+                        <div class="group relative">
+                            <div class="w-full h-12 bg-green-500 rounded-lg hover:bg-green-600 transition-colors cursor-pointer flex items-center justify-center">
+                                <span class="text-xs font-medium text-white">29</span>
+                            </div>
+                            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                                Jul: 29 activities<br>10.1kg CO₂ saved
+                            </div>
+                        </div>
+                       
+                        <!-- August -->
+                        <div class="group relative">
+                            <div class="w-full h-12 bg-green-300 rounded-lg hover:bg-green-400 transition-colors cursor-pointer flex items-center justify-center">
+                                <span class="text-xs font-medium text-white">19</span>
+                            </div>
+                            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                                Aug: 19 activities<br>6.8kg CO₂ saved
+                            </div>
+                        </div>
+                       
+                        <!-- September -->
+                        <div class="group relative">
+                            <div class="w-full h-12 bg-green-400 rounded-lg hover:bg-green-500 transition-colors cursor-pointer flex items-center justify-center">
+                                <span class="text-xs font-medium text-white">24</span>
+                            </div>
+                            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                                Sep: 24 activities<br>8.4kg CO₂ saved
+                            </div>
+                        </div>
+                       
+                        <!-- October -->
+                        <div class="group relative">
+                            <div class="w-full h-12 bg-green-500 rounded-lg hover:bg-green-600 transition-colors cursor-pointer flex items-center justify-center">
+                                <span class="text-xs font-medium text-white">27</span>
+                            </div>
+                            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                                Oct: 27 activities<br>9.3kg CO₂ saved
+                            </div>
+                        </div>
+                       
+                        <!-- November -->
+                        <div class="group relative">
+                            <div class="w-full h-12 bg-green-600 rounded-lg hover:bg-green-700 transition-colors cursor-pointer flex items-center justify-center">
+                                <span class="text-xs font-medium text-white">33</span>
+                            </div>
+                            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                                Nov: 33 activities<br>11.8kg CO₂ saved
+                            </div>
+                        </div>
+                       
+                        <!-- December (Current Month) -->
+                        <div class="group relative">
+                            <div class="w-full h-12 bg-green-400 rounded-lg hover:bg-green-500 transition-colors cursor-pointer flex items-center justify-center border-2 border-blue-400">
+                                <span class="text-xs font-medium text-white">23</span>
+                            </div>
+                            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                                Dec: 23 activities<br>8.5kg CO₂ saved<br>(Current month)
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <!-- Legend and Stats -->
+                    <div class="flex items-center justify-between mt-6 pt-4 border-t border-gray-100">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-xs text-gray-500">Activity Level:</span>
+                            <div class="flex items-center space-x-1">
+                                <div class="w-3 h-3 bg-green-100 rounded-sm"></div>
+                                <span class="text-xs text-gray-500">Low</span>
+                            </div>
+                            <div class="flex items-center space-x-1">
+                                <div class="w-3 h-3 bg-green-300 rounded-sm"></div>
+                                <span class="text-xs text-gray-500">Medium</span>
+                            </div>
+                            <div class="flex items-center space-x-1">
+                                <div class="w-3 h-3 bg-green-500 rounded-sm"></div>
+                                <span class="text-xs text-gray-500">High</span>
+                            </div>
+                            <div class="flex items-center space-x-1">
+                                <div class="w-3 h-3 bg-green-600 rounded-sm"></div>
+                                <span class="text-xs text-gray-500">Very High</span>
+                            </div>
+                        </div>
+                       
+                        <div class="text-right">
+                            <div class="text-sm text-gray-600">
+                                <span class="font-medium">Best Month:</span> November (33 activities)
+                            </div>
+                            <div class="text-xs text-gray-500">
+                                Average: 24.3 activities/month
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Edit Profile Section -->
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="text-3xl">👤</div>
+                        <h3 class="text-xl font-semibold text-gray-900">Edit Profile</h3>
+                    </div>
+                   
+                    <form id="profileForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                            <input type="text" id="profileName"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                                   placeholder="Enter your full name">
+                        </div>
+                       
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                            <input type="email" id="profileEmail"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                                   placeholder="Enter your email">
+                        </div>
+                       
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                            <input type="text" id="profileLocation"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                                   placeholder="City, Country">
+                        </div>
+                       
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Bio</label>
+                            <textarea id="profileBio" rows="3"
+                                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                                      placeholder="Tell us about your eco journey..."></textarea>
+                        </div>
+                       
+                        <button type="submit"
+                                class="w-full eco-gradient text-white font-semibold py-3 px-4 rounded-lg hover:shadow-lg transition-all duration-200">
+                            Save Changes
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Account Actions Section -->
+                <div class="space-y-6">
+                    <!-- Preferences -->
+                    <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                        <div class="flex items-center space-x-3 mb-6">
+                            <div class="text-3xl">🔔</div>
+                            <h3 class="text-xl font-semibold text-gray-900">Preferences</h3>
+                        </div>
+                       
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="font-medium text-gray-900">Email Notifications</p>
+                                    <p class="text-sm text-gray-600">Receive updates about your eco activities</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer" checked>
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500"></div>
+                                </label>
+                            </div>
+                           
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="font-medium text-gray-900">Weekly Reports</p>
+                                    <p class="text-sm text-gray-600">Get weekly summaries of your progress</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer" checked>
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500"></div>
+                                </label>
+                            </div>
+                           
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="font-medium text-gray-900">Team Updates</p>
+                                    <p class="text-sm text-gray-600">Notifications from your eco team</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500"></div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Account Actions -->
+                    <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                        <div class="flex items-center space-x-3 mb-6">
+                            <div class="text-3xl">🔐</div>
+                            <h3 class="text-xl font-semibold text-gray-900">Account</h3>
+                        </div>
+                       
+                        <div class="space-y-4">
+                            <button id="changePasswordBtn" class="w-full flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                                <div class="flex items-center space-x-3">
+                                    <div class="text-xl">🔑</div>
+                                    <div class="text-left">
+                                        <p class="font-medium text-gray-900">Change Password</p>
+                                        <p class="text-sm text-gray-600">Update your account password</p>
+                                    </div>
+                                </div>
+                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </button>
+                           
+                            <button id="exportDataBtn" class="w-full flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                                <div class="flex items-center space-x-3">
+                                    <div class="text-xl">📊</div>
+                                    <div class="text-left">
+                                        <p class="font-medium text-gray-900">Export Data</p>
+                                        <p class="text-sm text-gray-600">Download your eco activity data</p>
+                                    </div>
+                                </div>
+                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </button>
+                           
+                            <button id="settingsLogoutBtn" class="w-full flex items-center justify-between p-4 bg-red-50 rounded-lg hover:bg-red-100 transition-colors">
+                                <div class="flex items-center space-x-3">
+                                    <div class="text-xl">🚪</div>
+                                    <div class="text-left">
+                                        <p class="font-medium text-red-700">Logout</p>
+                                        <p class="text-sm text-red-600">Sign out of your account</p>
+                                    </div>
+                                </div>
+                                <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Log Activity Modal -->
+        <div id="logActivityModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="sticky top-0 bg-white p-6 border-b border-gray-100">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xl font-semibold text-gray-900">Log Activity</h3>
+                        <button id="closeModal" class="text-gray-400 hover:text-gray-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="p-6">
+                    <!-- Tab Navigation -->
+                    <div class="flex space-x-1 bg-gray-100 rounded-lg p-1 mb-6">
+                        <button id="newActivityTab" class="flex-1 py-2 px-4 text-sm font-medium rounded-md bg-white text-green-600 shadow-sm">
+                            New Activity
+                        </button>
+                        <button id="previousActivityTab" class="flex-1 py-2 px-4 text-sm font-medium rounded-md text-gray-600 hover:text-gray-900">
+                            Previous Activities
+                        </button>
+                    </div>
+
+                    <!-- New Activity Form -->
+                    <div id="newActivitySection">
+                        <form id="activityForm" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Activity Type</label>
+                                <select id="activityType" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                                    <option value="">Select activity...</option>
+                                    <option value="cycling">🚴 Cycling</option>
+                                    <option value="walking">🚶 Walking</option>
+                                    <option value="public-transport">🚌 Public Transport</option>
+                                    <option value="energy-saving">💡 Energy Saving</option>
+                                    <option value="recycling">♻️ Recycling</option>
+                                    <option value="carpooling">🚗 Carpooling</option>
+                                    <option value="plant-based-meal">🌱 Plant-based Meal</option>
+                                    <option value="water-saving">💧 Water Saving</option>
+                                </select>
+                            </div>
+                           
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Distance/Amount</label>
+                                <input type="number" id="activityAmount" step="0.1"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                                       placeholder="e.g., 5.2 km">
+                            </div>
+                           
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Notes (Optional)</label>
+                                <textarea id="activityNotes" rows="3"
+                                          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                                          placeholder="Add any additional details..."></textarea>
+                            </div>
+                           
+                            <button type="submit"
+                                    class="w-full eco-gradient text-white font-semibold py-3 px-4 rounded-lg hover:shadow-lg transition-all duration-200">
+                                Log Activity
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Previous Activities Section -->
+                    <div id="previousActivitySection" class="hidden">
+                        <div class="mb-4">
+                            <h4 class="text-lg font-medium text-gray-900 mb-2">Select from Previous Activities</h4>
+                            <p class="text-sm text-gray-600">Click on any activity below to log it again with the same details.</p>
+                        </div>
+
+                        <div class="space-y-3" id="previousActivitiesList">
+                            <!-- Recent activities will be populated here -->
+                            <div class="activity-item p-4 border border-gray-200 rounded-lg hover:bg-green-50 hover:border-green-300 cursor-pointer transition-all duration-200"
+                                 data-type="cycling" data-amount="5.2" data-notes="Morning commute to office">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="text-2xl">🚴</div>
+                                        <div>
+                                            <p class="font-medium text-gray-900">Cycling</p>
+                                            <p class="text-sm text-gray-600">5.2 km • Morning commute to office</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-sm font-medium text-green-600">+50 pts</p>
+                                        <p class="text-xs text-gray-500">1.2kg CO₂ saved</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="activity-item p-4 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-all duration-200"
+                                 data-type="public-transport" data-amount="12" data-notes="Bus to downtown">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="text-2xl">🚌</div>
+                                        <div>
+                                            <p class="font-medium text-gray-900">Public Transport</p>
+                                            <p class="text-sm text-gray-600">12 km • Bus to downtown</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-sm font-medium text-blue-600">+75 pts</p>
+                                        <p class="text-xs text-gray-500">2.8kg CO₂ saved</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="activity-item p-4 border border-gray-200 rounded-lg hover:bg-yellow-50 hover:border-yellow-300 cursor-pointer transition-all duration-200"
+                                 data-type="energy-saving" data-amount="1" data-notes="Switched to LED bulbs in living room">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="text-2xl">💡</div>
+                                        <div>
+                                            <p class="font-medium text-gray-900">Energy Saving</p>
+                                            <p class="text-sm text-gray-600">LED bulbs • Switched to LED bulbs in living room</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-sm font-medium text-yellow-600">+25 pts</p>
+                                        <p class="text-xs text-gray-500">0.8kg CO₂ saved</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="activity-item p-4 border border-gray-200 rounded-lg hover:bg-purple-50 hover:border-purple-300 cursor-pointer transition-all duration-200"
+                                 data-type="recycling" data-amount="2.5" data-notes="Plastic bottles and paper">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="text-2xl">♻️</div>
+                                        <div>
+                                            <p class="font-medium text-gray-900">Recycling</p>
+                                            <p class="text-sm text-gray-600">2.5 kg • Plastic bottles and paper</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-sm font-medium text-purple-600">+30 pts</p>
+                                        <p class="text-xs text-gray-500">0.5kg CO₂ saved</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="activity-item p-4 border border-gray-200 rounded-lg hover:bg-green-50 hover:border-green-300 cursor-pointer transition-all duration-200"
+                                 data-type="walking" data-amount="3.8" data-notes="Walk to grocery store">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="text-2xl">🚶</div>
+                                        <div>
+                                            <p class="font-medium text-gray-900">Walking</p>
+                                            <p class="text-sm text-gray-600">3.8 km • Walk to grocery store</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-sm font-medium text-green-600">+40 pts</p>
+                                        <p class="text-xs text-gray-500">0.9kg CO₂ saved</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="activity-item p-4 border border-gray-200 rounded-lg hover:bg-orange-50 hover:border-orange-300 cursor-pointer transition-all duration-200"
+                                 data-type="plant-based-meal" data-amount="1" data-notes="Vegetarian lunch instead of meat">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="text-2xl">🌱</div>
+                                        <div>
+                                            <p class="font-medium text-gray-900">Plant-based Meal</p>
+                                            <p class="text-sm text-gray-600">1 meal • Vegetarian lunch instead of meat</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-sm font-medium text-orange-600">+20 pts</p>
+                                        <p class="text-xs text-gray-500">1.5kg CO₂ saved</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="activity-item p-4 border border-gray-200 rounded-lg hover:bg-teal-50 hover:border-teal-300 cursor-pointer transition-all duration-200"
+                                 data-type="carpooling" data-amount="15" data-notes="Shared ride with 2 colleagues">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="text-2xl">🚗</div>
+                                        <div>
+                                            <p class="font-medium text-gray-900">Carpooling</p>
+                                            <p class="text-sm text-gray-600">15 km • Shared ride with 2 colleagues</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-sm font-medium text-teal-600">+60 pts</p>
+                                        <p class="text-xs text-gray-500">2.1kg CO₂ saved</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="activity-item p-4 border border-gray-200 rounded-lg hover:bg-cyan-50 hover:border-cyan-300 cursor-pointer transition-all duration-200"
+                                 data-type="water-saving" data-amount="50" data-notes="Shorter shower, fixed leaky faucet">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="text-2xl">💧</div>
+                                        <div>
+                                            <p class="font-medium text-gray-900">Water Saving</p>
+                                            <p class="text-sm text-gray-600">50 liters • Shorter shower, fixed leaky faucet</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-sm font-medium text-cyan-600">+15 pts</p>
+                                        <p class="text-xs text-gray-500">0.3kg CO₂ saved</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                            <div class="flex items-center space-x-2 text-sm text-gray-600">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <span>Click any activity above to log it again. You can modify the details before confirming.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+    <!-- ...existing code... -->
+    <!-- place app script after all HTML and after Firebase SDKs -->
+    <script src="app.js"></script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'985a35c10282ff9e',t:'MTc1ODk2NzgxMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

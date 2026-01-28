@@ -1,0 +1,52 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Start EcoTrack Server",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"start"
+			],
+			"isBackground": true,
+			"group": "none"
+		},
+		{
+			"label": "Install Dependencies",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"install"
+			],
+			"isBackground": false,
+			"group": "none"
+		},
+		{
+			"label": "Run EcoTrack",
+			"type": "shell",
+			"command": "C:\\EcoTrack\\FSD_Project\\start.bat",
+			"isBackground": true,
+			"group": "none"
+		},
+		{
+			"label": "Start Server",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"start"
+			],
+			"isBackground": true,
+			"group": "none"
+		},
+		{
+			"label": "Start EcoTrack Server",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"start"
+			],
+			"isBackground": true,
+			"group": "none"
+		}
+	]
+}
